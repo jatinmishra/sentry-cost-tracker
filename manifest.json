@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Sentry Error Cost Tracker",
+  "version": "1.3.0",
+  "description": "Injects an estimated monthly cost column into the Sentry issue stream, based on each issue's event volume and your selected plan.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://*.sentry.io/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://*.sentry.io/*"],
+      "js": ["pricing.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "settings.html",
+    "default_title": "Sentry Error Cost Tracker",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "settings.html"
+}

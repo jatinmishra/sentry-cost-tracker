@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Python (make_icon.py)
+__pycache__/
+*.pyc
+
+# Claude Code local settings (machine-specific)
+.claude/settings.local.json
