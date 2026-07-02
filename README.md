@@ -50,6 +50,23 @@ included in the base plan, and the tier depends on your org's *total* volume (no
 issue) — so exact per-issue attribution isn't possible from the stream. The figure is
 useful for ranking noisy issues by spend, not for reconciling an invoice.
 
+## Security & privacy
+
+This extension is a **local, UI-only tool**. It reads the numbers already visible on the
+Sentry page you're looking at, does the math in your browser, and draws a label next to
+them. That's it.
+
+- **No data is sent anywhere.** There is no backend, no analytics, no telemetry, and no
+  network requests of any kind — nothing about your issues, events, or org ever leaves
+  your machine.
+- **Nothing is saved except your own settings.** The only thing stored is the plan / tier
+  configuration you pick, kept in `chrome.storage.sync` so it follows your browser
+  profile. No issue data, event counts, or cost figures are ever persisted.
+- **Scoped to Sentry only.** The extension can only run on `https://*.sentry.io/*` (see
+  `host_permissions`); it has no access to any other site.
+- **Fully inspectable.** It's a small, unpacked, unminified extension — every line it runs
+  is in this folder for you to read.
+
 ## Notes
 
 - **Host scope** is `https://*.sentry.io/*`. For self-hosted Sentry, add your domain to
