@@ -6,6 +6,18 @@ computed from the issue's event volume and a rate you pick in settings.
 
 The same package loads unmodified in Chrome, Edge, and other Chromium browsers.
 
+## Screenshots
+
+**Issue stream with estimated cost**
+
+<!-- Edit this file in the GitHub web UI, delete the line below, and paste your screenshot here. -->
+_(screenshot coming soon)_
+
+**Settings**
+
+<!-- Edit this file in the GitHub web UI, delete the line below, and paste your screenshot here. -->
+_(screenshot coming soon)_
+
 ## Install (unpacked)
 
 1. Go to `chrome://extensions` (or `edge://extensions`)
