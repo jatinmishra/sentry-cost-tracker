@@ -10,13 +10,12 @@ The same package loads unmodified in Chrome, Edge, and other Chromium browsers.
 
 **Issue stream with estimated cost**
 
-<!-- Edit this file in the GitHub web UI, delete the line below, and paste your screenshot here. -->
-_(screenshot coming soon)_
+<img width="745" height="377" alt="image" src="https://github.com/user-attachments/assets/ddc15d0e-bfc3-4f36-91de-05157470079e" />
 
 **Settings**
 
-<!-- Edit this file in the GitHub web UI, delete the line below, and paste your screenshot here. -->
-_(screenshot coming soon)_
+<img width="337" height="589" alt="image" src="https://github.com/user-attachments/assets/d4a9c7f7-068c-46ff-929e-c34f70f81597" />
+
 
 ## Install (unpacked)
 
