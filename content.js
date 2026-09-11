@@ -69,6 +69,15 @@
     return n && n.parentElement === container ? n : null;
   }
 
+  // Best-effort title extraction: every stream row links to its own issue detail
+  // page, so we key off the href pattern rather than a specific component name —
+  // that's more stable across Sentry frontend refactors than a class/attribute guess.
+  function readTitle(row) {
+    const link = row.querySelector('a[href*="/issues/"]');
+    const raw = (link && link.textContent) || "";
+    return raw.replace(/\s+/g, " ").trim() || "Untitled issue";
+  }
+
   /* ---------- styling ---------- */
 
   function injectStyleOnce() {
@@ -186,6 +195,23 @@
     });
   }
 
+  // Gathers {title, events, cost} for every stream row currently in the DOM, using
+  // the exact same rate lookup as the on-page labels (no separate cost formula).
+  // Used by the shareable cost card in the popup — never sent anywhere over the
+  // network, just returned to the extension's own popup via chrome.runtime messaging.
+  function collectIssueData() {
+    const rate = PRICING.getRate(settings);
+    const issues = [];
+    document.querySelectorAll(STREAM_ROW).forEach(function (row) {
+      const counts = row.querySelectorAll('[data-sentry-component="Count"]');
+      if (!counts.length) return;
+      const events = readCount(counts[0]);
+      if (isNaN(events)) return;
+      issues.push({ title: readTitle(row), events: events, cost: events * rate });
+    });
+    return issues;
+  }
+
   /* ---------- wiring ---------- */
 
   const debouncedScan = debounce(scan, 150);
@@ -213,5 +239,12 @@
       }
     });
     if (changed) recomputeAll();
+  });
+
+  // Only the extension's own popup/options page can reach this (page scripts can't
+  // trigger chrome.runtime.onMessage on a content script) — no new permission needed.
+  chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (!msg || msg.type !== "SEC_COLLECT_ISSUES") return;
+    sendResponse({ issues: collectIssueData() });
   });
 })();

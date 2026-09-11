@@ -135,6 +135,44 @@
       cursor: pointer;
     }
     input[type="color"]:disabled { opacity: 0.4; cursor: not-allowed; }
+    .card-section {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .primary-btn, .secondary-btn {
+      width: 100%;
+      padding: 9px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .primary-btn {
+      color: #fff;
+      background: var(--accent);
+      border: none;
+    }
+    .primary-btn:hover { opacity: 0.92; }
+    .secondary-btn {
+      color: var(--accent);
+      background: var(--field-bg);
+      border: 1px solid var(--line);
+    }
+    .secondary-btn:hover { background: var(--line); }
+    #cardStatus { margin-top: 8px; margin-bottom: 0; }
+    #cardStatus:empty { display: none; }
+    #cardCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #140f1c;
+    }
     .note {
       margin-top: 14px;
       font-size: 11px;
@@ -222,12 +260,32 @@
     these figures to rank issues by spend, not to reconcile an invoice.
   </p>
 
+  <div class="card-section">
+    <div class="appearance-head">
+      <span>Shareable cost card</span>
+    </div>
+    <div class="appearance-row">
+      <label class="inline" for="cardSize">Format</label>
+      <select id="cardSize">
+        <option value="landscape">Link preview (1200×630)</option>
+        <option value="square">Square (1080×1080)</option>
+      </select>
+    </div>
+    <button id="generateCard" type="button" class="primary-btn">Generate cost card</button>
+    <p id="cardStatus" class="note"></p>
+    <div id="cardPreviewWrap" style="display: none;">
+      <canvas id="cardCanvas"></canvas>
+      <button id="downloadCard" type="button" class="secondary-btn">Download PNG</button>
+    </div>
+  </div>
+
   <div class="verified">
     <span id="verified">Rates last verified: —</span>
     <a id="source" href="#" target="_blank" rel="noreferrer">Sentry pricing ↗</a>
   </div>
 
   <script src="pricing.js"></script>
+  <script src="costCard.js"></script>
   <script src="settings.js"></script>
 </body>
 </html>

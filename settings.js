@@ -138,6 +138,90 @@
     updatePreview();
   });
 
+  /* ---------- shareable cost card ---------- */
+
+  const cardSizeSel = $("cardSize");
+  const generateCardBtn = $("generateCard");
+  const downloadCardBtn = $("downloadCard");
+  const cardStatus = $("cardStatus");
+  const cardPreviewWrap = $("cardPreviewWrap");
+  const cardCanvas = $("cardCanvas");
+
+  const TOP_N = 5;
+
+  function showCardStatus(msg) {
+    cardStatus.textContent = msg || "";
+  }
+
+  // Prefer the active Sentry tab; fall back to any open Sentry tab (covers the
+  // case where this page is open as a full options tab, not the toolbar popup).
+  function findSentryTab(cb) {
+    const pattern = "https://*.sentry.io/*";
+    chrome.tabs.query({ active: true, currentWindow: true, url: pattern }, function (activeTabs) {
+      if (activeTabs && activeTabs[0]) return cb(activeTabs[0]);
+      chrome.tabs.query({ url: pattern }, function (anyTabs) {
+        cb(anyTabs && anyTabs[0]);
+      });
+    });
+  }
+
+  function generateCard() {
+    showCardStatus("");
+    cardPreviewWrap.style.display = "none";
+
+    findSentryTab(function (tab) {
+      if (!tab || !tab.id) {
+        showCardStatus("Open a Sentry issues page, then try again.");
+        return;
+      }
+      chrome.tabs.sendMessage(tab.id, { type: "SEC_COLLECT_ISSUES" }, function (response) {
+        if (chrome.runtime.lastError || !response) {
+          showCardStatus("Couldn't read issues from that tab — reload the Sentry page and try again.");
+          return;
+        }
+        const issues = response.issues || [];
+        if (!issues.length) {
+          showCardStatus("No issues found on that page yet.");
+          return;
+        }
+
+        const top = issues.slice().sort((a, b) => b.cost - a.cost).slice(0, TOP_N);
+        const total = issues.reduce((sum, it) => sum + it.cost, 0);
+        const size = cardSizeSel.value === "square" ? "square" : "landscape";
+        const dims = SEC_CARD.SIZES[size];
+
+        cardCanvas.width = dims.w;
+        cardCanvas.height = dims.h;
+
+        SEC_CARD.render(cardCanvas, {
+          issues: top,
+          total: total,
+          count: issues.length,
+          size: size
+        }).then(function () {
+          cardPreviewWrap.style.display = "block";
+        });
+      });
+    });
+  }
+
+  function downloadCard() {
+    cardCanvas.toBlob(function (blob) {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sentry-cost-card.png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }, "image/png");
+  }
+
+  generateCardBtn.addEventListener("click", generateCard);
+  downloadCardBtn.addEventListener("click", downloadCard);
+
   // Staleness, made visible.
   (function showVerified() {
     const el = $("verified");

@@ -16,6 +16,9 @@ The same package loads unmodified in Chrome, Edge, and other Chromium browsers.
 
 <img width="337" height="589" alt="image" src="https://github.com/user-attachments/assets/d4a9c7f7-068c-46ff-929e-c34f70f81597" />
 
+**Shareable cost card**
+
+*(screenshot coming soon — click "Generate cost card" in the toolbar popup to see it live)*
 
 ## Install (unpacked)
 
@@ -36,6 +39,19 @@ Stored in `chrome.storage.sync`, so they follow your browser profile:
 - **Volume tier** — your org's *total* monthly error volume bracket
 - **Label appearance** — theme-adaptive by default; you can override colour and font
   size, or **Reset to theme**
+
+## Shareable cost card
+
+Click **Generate cost card** in the toolbar popup to turn the issues currently visible
+on the page into a shareable PNG — handy for posting the "this is what our noise costs"
+story to Slack or social media.
+
+The card shows the top 5 most expensive issues on the page (title, event count, and
+estimated cost each), a total across every visible issue, and a small watermark linking
+back to this repo. Pick **Link preview (1200×630)** for chat/social previews or
+**Square (1080×1080)** for platforms that crop to a square. The image is drawn with the
+`<canvas>` API and downloaded straight to your machine — same privacy model as
+everything else here: no network calls, no new permissions, nothing leaves your browser.
 
 ## How the number is computed
 
@@ -58,7 +74,8 @@ them. That's it.
 
 - **No data is sent anywhere.** There is no backend, no analytics, no telemetry, and no
   network requests of any kind — nothing about your issues, events, or org ever leaves
-  your machine.
+  your machine. This includes the shareable cost card: it's rendered on a local
+  `<canvas>` and saved as a PNG via a normal browser download, not uploaded anywhere.
 - **Nothing is saved except your own settings.** The only thing stored is the plan / tier
   configuration you pick, kept in `chrome.storage.sync` so it follows your browser
   profile. No issue data, event counts, or cost figures are ever persisted.
@@ -80,6 +97,7 @@ them. That's it.
 |------|------|
 | `manifest.json` | MV3 config |
 | `pricing.js` | Rate table + lookup helpers |
-| `content.js` | Finds rows, computes cost, injects the cost line |
-| `settings.html` / `settings.js` | Plan/type/tier selector (popup + options page) |
+| `content.js` | Finds rows, computes cost, injects the cost line, and answers the popup's request for issue data (for the cost card) |
+| `settings.html` / `settings.js` | Plan/type/tier selector and cost-card controls (popup + options page) |
+| `costCard.js` | Draws the shareable cost card onto a `<canvas>` |
 | `icons/` | Toolbar/store icons |
