@@ -18,7 +18,9 @@ The same package loads unmodified in Chrome, Edge, and other Chromium browsers.
 
 **Shareable cost card**
 
-*(screenshot coming soon — click "Generate cost card" in the toolbar popup to see it live)*
+<img width="600" alt="Shareable cost card example" src="screenshots/cost-card-demo.png" />
+
+*(mocked data for illustration — click "Generate cost card" in the toolbar popup to generate one from your own issues)*
 
 ## Install (unpacked)
 
